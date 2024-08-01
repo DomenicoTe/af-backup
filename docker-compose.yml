@@ -1,17 +1,9 @@
 version: '3'
 services:
-  myapp:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: sh
-    tty: true
-    stdin_open: true
-    # volumes:
-    #   - ./bin/:/usr/src/app/dist/
-    #   - ./log/:/usr/src/app/log/
+  af-backup:
+    image: index.docker.io/industrialcloud/af-backup-2:latest
     env_file:
-      - .env
+      - backup.env
     networks:
       - app
 
