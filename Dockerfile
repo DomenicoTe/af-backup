@@ -10,8 +10,15 @@ RUN apt-get update && \
     && rm -rf mongodb-database-tools-debian10-x86_64-100.9.4.tgz /mongodb-tools \
     && apt-get clean 
 # Imposta la directory di lavoro
+# Imposta la directory di lavoro
 WORKDIR /usr/src/app
 COPY ./dist /usr/src/app/dist
+
+# Assicurati che il file sia eseguibile
 RUN chmod +x /usr/src/app/dist/af-backup
+
+# Mostra i permessi dei file per debug
+RUN ls -l /usr/src/app/dist
+
 # Comando da lanciare
 CMD ["/usr/src/app/dist/af-backup"]
