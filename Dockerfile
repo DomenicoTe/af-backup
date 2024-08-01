@@ -19,6 +19,6 @@ RUN chmod +x /usr/src/app/dist/af-backup
 
 # Mostra i permessi dei file per debug
 RUN ls -l /usr/src/app/dist
-
+RUN echo $PATH
 # Comando da lanciare
 CMD ["/usr/src/app/dist/af-backup"]
