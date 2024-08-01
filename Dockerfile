@@ -12,5 +12,6 @@ RUN apt-get update && \
 # Imposta la directory di lavoro
 WORKDIR /usr/src/app
 COPY ./dist /usr/src/app/dist
+RUN chmod +x /usr/src/app/dist/af-backup
 # Comando da lanciare
 CMD ["/usr/src/app/dist/af-backup"]
