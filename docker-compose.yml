@@ -4,11 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: sh
-    tty: true
-    stdin_open: true
-    volumes:
-      - ./dist:/app
     env_file:
       - .env
     networks:
@@ -16,3 +11,4 @@ services:
 
 networks:
   app:
+    external: true
