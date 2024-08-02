@@ -20,5 +20,6 @@ module.exports = async function (path, config) {
         console.log('Minio complete')
     } catch (error) {
         console.log("Minio failed")
+        console.log(error.toString())
     }
 }
