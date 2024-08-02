@@ -16,11 +16,13 @@ async function main() {
     console.log(new Date(), 'Backup started')
     switch (config.mode) {
         case 'release':
-            await mongo(path, config.mongo, config.silent)
-            await minio(path, config.minio, config.silent)
+            await mongo(path, config.mongo, config.mongodb)
+            await minio(path, config.minio)
             break
         case 'dev':
-            fs.writeFileSync(`${path}/test.txt`, 'test')
+            // fs.writeFileSync(`${path}/test.txt`, 'test')
+            if(config.mongodb) console.log('MongoDB backup disabled')
+            else console.log(config.mongo,config.mongodb)
             break
     }
     if (fs.readdirSync(path).length === 0) console.log(new Date(), 'Backup failed')

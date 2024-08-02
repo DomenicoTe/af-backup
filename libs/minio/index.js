@@ -14,8 +14,7 @@ module.exports = async function (path, config) {
         }
         //Fai un tar bz2 di tutto il contenuto della cartella minio
         await exec(`tar -cjf ${path}/minio.tar.bz2 ${path}/minio`)
-        //Elimina la cartella minio
-        // await exec(`rm -rf ${path}/minio`)
+
         fs.rmSync(`${path}/minio`, { recursive: true, force: true })
         console.log('Minio complete')
     } catch (error) {
