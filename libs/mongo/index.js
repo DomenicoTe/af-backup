@@ -6,7 +6,7 @@ module.exports = async function (path, url) {
         await exec(`mongodump --host ${url} --port 27017 --archive=${path}/mongo.gz --gzip --db agile-factory --quiet`)
         console.log('Mongo complete')
     }
-    catch (e) { console.log(e.toString()) }
+    catch (e) { console.log("Mongo failed") }
 }
 
 

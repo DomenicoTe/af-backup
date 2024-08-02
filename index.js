@@ -13,21 +13,20 @@ scheduler(main, config.schedule)
 async function main() {
     const path = `./${filename()}`
     fs.mkdirSync(path, { recursive: true })
-    try {
-        console.log(new Date(), 'Backup started')
-        switch (config.mode) {
-            case 'release':
-                await mongo(path, config.mongo, config.silent)
-                await minio(path, config.minio, config.silent)
-                break
-            case 'dev':
-                fs.writeFileSync(`${path}/test.txt`, 'test')
-                break
-        }
+    console.log(new Date(), 'Backup started')
+    switch (config.mode) {
+        case 'release':
+            await mongo(path, config.mongo, config.silent)
+            await minio(path, config.minio, config.silent)
+            break
+        case 'dev':
+            fs.writeFileSync(`${path}/test.txt`, 'test')
+            break
+    }
+    if (fs.readdirSync(path).length === 0) console.log(new Date(), 'Backup failed')
+    else {
         await vsftp(path, config.ftp, config.silent)
         console.log(new Date(), 'Backup complete')
-    } catch (error) {
-        console.log(error)
     }
     fs.rmSync(path, { recursive: true, force: true })
 
