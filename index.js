@@ -20,14 +20,14 @@ async function main() {
             await minio(path, config.minio)
             break
         case 'dev':
-            // fs.writeFileSync(`${path}/test.txt`, 'test')
+            fs.writeFileSync(`${path}/test.txt`, 'test')
             if(config.mongodb) console.log('MongoDB backup disabled')
             else console.log(config.mongo,config.mongodb)
             break
     }
     if (fs.readdirSync(path).length === 0) console.log(new Date(), 'Backup failed')
     else {
-        await vsftp(path, config.ftp, config.silent)
+        await vsftp(path, config.ftp)
         console.log(new Date(), 'Backup complete')
     }
     fs.rmSync(path, { recursive: true, force: true })
