@@ -6,7 +6,7 @@ module.exports = async function (path, ftp_info) {
     try {
         const password = credentials[ftp_info.user]
         if (!password) throw new Error('Password not found')
-        let ftp = new FTP_Client(ftp_info.server, ftp_info.user, password)
+        const ftp = new FTP_Client(ftp_info.server, ftp_info.user, password)
         await ftp.Connect()
         await exec(`tar -cjf ${path}.tar.bz2 ${path}`)
         await ftp.Upload(`/home/${ftp_info.user}/ftp/files/${path}.tar.bz2`, `${path}.tar.bz2`)
