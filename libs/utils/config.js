@@ -3,8 +3,8 @@ require('dotenv').config();
 const Joi = require('joi');
 
 const envVarsSchema = Joi.object({
-    SECRET_IV : Joi.string().default('4a05e16ae919238015240deef31f62dc'),
-    SECRET_KEY: Joi.string().default('13d9e09fafd820cfee7f831b67365e0372eda4a494cb591c2e01fc6fc40abfbd'),
+    SECRET_IV : Joi.string().required(),
+    SECRET_KEY: Joi.string().required(),
     SECRET_DATA : Joi.string().required(),
 }).unknown().required();
 
