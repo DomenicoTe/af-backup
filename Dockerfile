@@ -16,7 +16,6 @@ COPY ./dist /usr/src/app/dist
 
 # Assicurati che il file sia eseguibile
 RUN chmod +x /usr/src/app/dist/af-backup
-RUN chmod +x /usr/src/app/dist/af-backup-test
 
 # Mostra i permessi dei file per debug
 RUN ls -l /usr/src/app/dist

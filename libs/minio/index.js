@@ -1,6 +1,6 @@
-const Minio_Client = require('./class.js');
-const exec = require('../utils/exec.js')
 const fs = require('fs')
+const Minio_Client = require('./class');
+const { exec } = require('../utils/main')
 const { quiet } = require('../../config')
 
 module.exports = async function (path, config) {
@@ -9,6 +9,7 @@ module.exports = async function (path, config) {
         const list = await minio.list()
 
         if (!fs.existsSync(`${path}/minio`)) fs.mkdirSync(`${path}/minio`, { recursive: true })
+
         for (const bucket in list) {
             for (const object of list[bucket]) {
                 if (!quiet) console.log(`Downloading ${object} from ${bucket}`)
@@ -22,8 +23,7 @@ module.exports = async function (path, config) {
         console.log('Minio complete')
         return true
     } catch (error) {
-        console.log("Minio failed")
-        console.log(error.toString())
+        console.log("Minio failed",error.toString())
         return false
     }
 }
