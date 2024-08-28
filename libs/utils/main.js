@@ -13,7 +13,8 @@ module.exports.scheduler = function (callback, time) {
 
 module.exports.retries = async function (callback, time) {
     //Do the callback a number of times
-    for (let i = 0; i < time; i++) { console.log("Debug mode for af-backup"); await callback() }
+    if (time > 1) console.log("Debug mode for af-backup")
+    for (let i = 0; i < time; i++) { await callback() }
 }
 
 module.exports.filename = function () {
@@ -37,7 +38,7 @@ module.exports.exec = function (command, quiet = true) {
     })
 }
 
-module.exports.report = async function (nome, bkp, minio, mongo) {
+module.exports.report = async function (nome, bkp, mongo, minio) {
     const slackClient = new WebClient(slack_token);
     const channel = 'C0529SU3EMQ';
     if (!(bkp && minio && mongo)) {
