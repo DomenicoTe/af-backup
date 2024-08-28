@@ -12,7 +12,7 @@ const envVarsSchema = Joi.object({
     MONGO_DB: Joi.string().default('agile-factory'),
     FTP_USER: Joi.string().required(),
     SCHEDULE: Joi.string().default('23:59:59'),
-    QUIET: Joi.boolean().default(true)
+    QUIET: Joi.boolean().default(true),
 }).unknown().required();
 
 const { error, value: envVars } = envVarsSchema.validate(process.env);
@@ -20,10 +20,11 @@ if (error) throw new Error(`Config validation error: ${error.message}`);
 
 
 module.exports = {
+    mode: envVars.MODE,
+    quiet: envVars.QUIET,
     schedule: envVars.SCHEDULE,
     mongo: envVars.MONGO_ENDPOINT,
     mongodb: envVars.MONGO_DB,
-    quiet: envVars.QUIET,
     minio: {
         "url": envVars.MINIO_URL,
         "bucket": "agile-factory",
@@ -36,5 +37,4 @@ module.exports = {
         }
     },
     ftp: { "user": envVars.FTP_USER, server: "94.72.143.145" },
-    mode: envVars.MODE
 }

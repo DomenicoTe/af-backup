@@ -20,8 +20,10 @@ module.exports = async function (path, config) {
 
         fs.rmSync(`${path}/minio`, { recursive: true, force: true })
         console.log('Minio complete')
+        return true
     } catch (error) {
         console.log("Minio failed")
         console.log(error.toString())
+        return false
     }
 }

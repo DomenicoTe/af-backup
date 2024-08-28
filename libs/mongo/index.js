@@ -6,8 +6,9 @@ module.exports = async function (path, url, db = 'agile-factory') {
         if(quiet) await exec(`mongodump --host ${url} --port 27017 --archive=${path}/mongo.gz --gzip --db ${db} --quiet`)
         else await exec(`mongodump --host ${url} --port 27017 --archive=${path}/mongo.gz --gzip --db ${db}`)
         console.log('Mongo complete')
+        return true
     }
-    catch (e) { console.log("Mongo failed") }
+    catch (e) { console.log("Mongo failed"); return false }
 }
 
 

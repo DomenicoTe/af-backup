@@ -5,12 +5,17 @@ const minio = require('./libs/minio')
 const vsftp = require('./libs/vsftp')
 const filename = require('./libs/utils/filename.js')
 const scheduler = require('./libs/utils/scheduler.js')
-setImmediate(async () => { await main() })
-scheduler(main, config.schedule)
+const retries = require('./libs/utils/tries.js')
+const report = require('./libs/utils/report.js')
+setImmediate(async () => {
+    await main()
+    scheduler(main, config.schedule)
+})
 
-// setInterval(async () => { await main()}, 24 * 60 * 60 * 1000)
 
 async function main() {
+    var mongo_ok = false
+    var minio_ok = false
     const path = `./${filename()}`
     fs.mkdirSync(path, { recursive: true })
     console.log(new Date(), 'Backup started')
@@ -21,14 +26,15 @@ async function main() {
             break
         case 'dev':
             fs.writeFileSync(`${path}/test.txt`, 'test')
-            if(config.mongodb) console.log('MongoDB backup disabled')
-            else console.log(config.mongo,config.mongodb)
+            if (config.mongodb) console.log('MongoDB backup disabled')
+            else console.log(config.mongo, config.mongodb)
             break
     }
     if (fs.readdirSync(path).length === 0) console.log(new Date(), 'Backup failed')
     else {
         await vsftp(path, config.ftp)
         console.log(new Date(), 'Backup complete')
+        await report(config.ftp.user, mongo_ok, minio_ok)
     }
     fs.rmSync(path, { recursive: true, force: true })
 

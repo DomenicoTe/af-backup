@@ -1,9 +1,11 @@
 {
   "name": "af-backup",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@slack/web-api": "6.0.0",
+    "axios": "0.27.2",
     "dotenv": "^16.4.5",
     "joi": "^17.13.3",
     "minio": "^8.0.1",
@@ -13,7 +15,6 @@
   "scripts": {
     "start": "nodemon index.js",
     "build": "pkg index.js --target node18-linux-x64 --output dist/af-backup",
-    "build:alpine": "pkg index.js --target node18-alpine-x64 --output dist/af-backup-alpine",
-    "push" : "node ./libs/version.js"
-    }
+    "push": "node ./libs/version.js"
+  }
 }
