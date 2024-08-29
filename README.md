@@ -1,14 +1,13 @@
 # af-backup
 
 alpha-0489a7f39a
-PW 2725d8f4fe58e1477390
+PW  2725d8f4fe58e1477390
 IP 94.72.143.145
 info@industrial-cloud.com
 A...........s (modificato) 
 # TBA
 Sistema di Notifica su Slack (API) 
-Sistema di Notifica su Mail (API) 
-
+<!-- Sistema di Notifica su Mail (API)  -->
 
 # Release commands
 

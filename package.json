@@ -1,6 +1,5 @@
 {
   "name": "af-backup",
-  "version": "1.3.3",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
@@ -16,5 +15,6 @@
     "start": "nodemon index.js",
     "build": "pkg index.js --target node18-linux-x64 --output dist/af-backup",
     "push": "node ./libs/version.js"
-  }
+  },
+  "version": "1.4.0"
 }

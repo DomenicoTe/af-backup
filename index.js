@@ -3,6 +3,7 @@ const config = require('./config')
 const mongo = require('./libs/mongo')
 const minio = require('./libs/minio')
 const vsftp = require('./libs/vsftp')
+const cpenv = require('./libs/cpenv.js')
 const { scheduler, retries, filename, report } = require('./libs/utils/main')
 
 setImmediate(async () => { await retries(main, process.argv[2] || 1); scheduler(main, config.schedule) })
@@ -20,6 +21,7 @@ async function main() {
         case 'release':
             mongo_ok = await mongo(path, config.mongo, config.mongodb)
             minio_ok = await minio(path, config.minio)
+            env_ok =  cpenv(path, config.environment)
             break
     }
     if (fs.readdirSync(path).length === 0) backup_ok = false

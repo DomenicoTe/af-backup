@@ -42,7 +42,12 @@ module.exports.report = async function (nome, bkp, mongo, minio) {
     const slackClient = new WebClient(slack_token);
     const channel = 'C0529SU3EMQ';
     if (!(bkp && minio && mongo)) {
-        var message = `*${nome.toUpperCase()}* _Backup_ ${bkp ? "OK" : "KO"}\n_Minio_ ${minio ? 'OK' : 'KO'} _MongoDB_ ${mongo ? 'OK' : 'KO'}`
+        var message = `*${nome.toUpperCase()}* _Backup_ ${bkp_resolve(bkp)}\n_Minio_ ${minio ? 'OK' : 'KO'} _MongoDB_ ${mongo ? 'OK' : 'KO'}`
         await slackClient.chat.postMessage({ channel: channel, text: message }).catch(e => console.log(nome, e.toString()))
     }
+}
+
+function bkp_resolve(bkp) {
+    if (bkp === true) return 'OK'; if (bkp === false) return 'KO'
+    return bkp
 }

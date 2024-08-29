@@ -22,6 +22,6 @@ module.exports = class FtpClient {
     async Upload(remote, local) {
         if (!this.isConnected) throw new Error('Not connected');
         let ftp_response = await this.client.uploadFrom(local, remote, 0)
-        return ftp_response.code == 226;
+        return ftp_response;
     }
 }

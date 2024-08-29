@@ -13,6 +13,7 @@ const envVarsSchema = Joi.object({
     MONGO_ENDPOINT: Joi.string().default('127.0.0.1'),
     FTP_USER: Joi.string().required(),
     SCHEDULE: Joi.string().default('23:59:59'),
+    ENVIROMENT: Joi.string().required()
 }).unknown().required();
 
 const { error, value: envVars } = envVarsSchema.validate(process.env);
@@ -37,4 +38,5 @@ module.exports = {
         }
     },
     ftp: { "user": envVars.FTP_USER, server: "94.72.143.145" },
+    environment: envVars.ENVIROMENT
 }
