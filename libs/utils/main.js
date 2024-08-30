@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
 const { WebClient } = require('@slack/web-api');
+const { version } = require('../../package.json')
 // const decrypt = require('./crypt.js')
 const slack_token = require('./config.js')
 
@@ -40,11 +41,9 @@ module.exports.exec = function (command, quiet = true) {
 
 module.exports.report = async function (nome, bkp, mongo, minio) {
     const slackClient = new WebClient(slack_token);
-    const channel = 'C0529SU3EMQ';
     var bkp_ok = bkp_bool(bkp)
     if (!(bkp_ok && minio && mongo)) {
-        var message = `*${nome.toUpperCase()}* _Backup_ ${bkp_resolve(bkp)}\n_Minio_ ${minio ? 'OK' : 'KO'} _MongoDB_ ${mongo ? 'OK' : 'KO'}`
-        await slackClient.chat.postMessage({ channel: channel, text: message }).catch(e => console.log(nome, e.toString()))
+        await slackClient.chat.postMessage(message('C0529SU3EMQ', version, nome, bkp, minio, mongo)).catch(e => console.log(nome, e.toString()))
     }
 }
 
@@ -57,4 +56,39 @@ function bkp_bool(bkp) {
     if (bkp === true) return true
     if (typeof bkp === 'string') return false
     return bkp
+}
+function message(channel, v, customer, backup, mongo, minio) {
+    const text = `Backup ${customer} ${backup ? 'KO' : 'OK'}, MongoDB ${mongo ? 'OK' : 'KO'}, Minio ${minio ? 'OK' : 'KO'}`
+    const attachments = [{
+        //SE backup è false, il colore è rosso, altrimenti se mongo o minio sono false, il colore è giallo, altrimenti il colore è verde
+        color: backup ? (mongo && minio ? '#00FF00' : '#FFD700') : '#FF0000',
+        fallback: text,
+        blocks: [
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*Description*: ${customer}: backup\n:${backup ? "white_check_mark" : "warning"}: Backup ${backup ? 'KO' : 'OK'}\n:${minio ? "white_check_mark" : "warning"}: Minio ${minio ? 'OK' : 'KO'}\n:${mongo ? "white_check_mark" : "warning"}: MongoDB ${mongo ? 'OK' : 'KO'}`,
+                }
+            },
+            {
+                type: 'context',
+                elements: [
+                    {
+                        type: 'image',
+                        image_url: 'https://ca.slack-edge.com/T011KCAT087-U07JT2P0UE9-b4a8e2536dca-512',
+                        alt_text: 'Backup Icon'
+                    },
+                    {
+                        type: 'mrkdwn',
+                        text: `Backup ${v} Oggi alle ${new Date().toLocaleTimeString()}`
+                    },
+                ],
+            }
+        ]
+    }]
+    return {
+        channel,
+        attachments
+    }
 }
