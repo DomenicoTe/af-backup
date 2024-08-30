@@ -15,7 +15,8 @@ module.exports = async function (path, ftp_info) {
         if (ftp_response_tar.code == 226 && ftp_response_opc.code == 226) backup_ok = true
         else if(ftp_response_tar.code != 226) backup_ok = ftp_response_tar.message
         else if(ftp_response_opc.code != 226) backup_ok = ftp_response_opc.message
-        
+        else backup_ok = false
+
     }
     catch (error) { backup_ok = false }
     finally { await ftp.Close(); return backup_ok }

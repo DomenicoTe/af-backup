@@ -41,7 +41,8 @@ module.exports.exec = function (command, quiet = true) {
 module.exports.report = async function (nome, bkp, mongo, minio) {
     const slackClient = new WebClient(slack_token);
     const channel = 'C0529SU3EMQ';
-    if (!(bkp && minio && mongo)) {
+    var bkp_ok = bkp_bool(bkp)
+    if (!(bkp_ok && minio && mongo)) {
         var message = `*${nome.toUpperCase()}* _Backup_ ${bkp_resolve(bkp)}\n_Minio_ ${minio ? 'OK' : 'KO'} _MongoDB_ ${mongo ? 'OK' : 'KO'}`
         await slackClient.chat.postMessage({ channel: channel, text: message }).catch(e => console.log(nome, e.toString()))
     }
@@ -49,5 +50,11 @@ module.exports.report = async function (nome, bkp, mongo, minio) {
 
 function bkp_resolve(bkp) {
     if (bkp === true) return 'OK'; if (bkp === false) return 'KO'
+    return bkp
+}
+function bkp_bool(bkp) {
+    //Se bkp = true, allora è andato tutto bene
+    if (bkp === true) return true
+    if (typeof bkp === 'string') return false
     return bkp
 }

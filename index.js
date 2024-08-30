@@ -21,7 +21,7 @@ async function main() {
         case 'release':
             mongo_ok = await mongo(path, config.mongo, config.mongodb)
             minio_ok = await minio(path, config.minio)
-            env_ok =  cpenv(path, config.environment)
+            cpenv(path, config.environment)
             break
     }
     if (fs.readdirSync(path).length === 0) backup_ok = false
