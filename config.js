@@ -3,17 +3,17 @@ const Joi = require('joi');
 
 // define validation for all the env vars
 const envVarsSchema = Joi.object({
-    MODE: Joi.string().valid('release', 'dev').required(),
-    QUIET: Joi.boolean().default(true),
+    FTP_USER: Joi.string().required(),
     MINIO_URL: Joi.string().required(),
     MINIO_USER: Joi.string().required(),
     MINIO_PASS: Joi.string().required(),
+    QUIET: Joi.boolean().default(true),
     MONGO_DB: Joi.string().default('agile-factory'),
-    MINIO_ENDPOINT: Joi.string().default('127.0.0.1'),
-    MONGO_ENDPOINT: Joi.string().default('127.0.0.1'),
-    FTP_USER: Joi.string().required(),
+    MINIO_ENDPOINT: Joi.string().default('minio'),
+    MONGO_ENDPOINT: Joi.string().default('mongodb'),
     SCHEDULE: Joi.string().default('23:59:59'),
-    ENVIROMENT: Joi.string().default('/agile')
+    ENVIROMENT: Joi.string().default('/agile'),
+    MODE: Joi.string().valid('release', 'dev').default('release'),
 }).unknown().required();
 
 const { error, value: envVars } = envVarsSchema.validate(process.env);
