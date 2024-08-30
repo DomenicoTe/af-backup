@@ -6,12 +6,17 @@ module.exports = async function (path, ftp_info) {
     const ftp = new FTP_Client(ftp_info.server, ftp_info.user, password(ftp_info.user))
     var backup_ok
     try {
-        await exec(`tar -cjf ${path}.tar.bz2 ${path}`)
+        // Fai un tar del path escludendo il file bin-opcua
+        await exec(`tar -cjf ${path}.tar.bz2 --exclude=${path}/bin-opcua ${path}`)
         await ftp.Connect()
-        var ftp_response = await ftp.Upload(`/home/${ftp_info.user}/ftp/files/${path}.tar.bz2`, `${path}.tar.bz2`)
-        if(ftp_response.code == 226) backup_ok = true
-        else backup_ok = ftp_response.message
-    } 
+        var ftp_response_tar = await ftp.Upload(`/home/${ftp_info.user}/ftp/files/${path}.tar.bz2`, `${path}.tar.bz2`)
+        var ftp_response_opc = await ftp.Upload(`/home/${ftp_info.user}/ftp/files/${path}/bin-opcua`, `${path}/bin-opcua`)
+        
+        if (ftp_response_tar.code == 226 && ftp_response_opc.code == 226) backup_ok = true
+        else if(ftp_response_tar.code != 226) backup_ok = ftp_response_tar.message
+        else if(ftp_response_opc.code != 226) backup_ok = ftp_response_opc.message
+        
+    }
     catch (error) { backup_ok = false }
     finally { await ftp.Close(); return backup_ok }
 }

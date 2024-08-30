@@ -13,7 +13,7 @@ const envVarsSchema = Joi.object({
     MONGO_ENDPOINT: Joi.string().default('127.0.0.1'),
     FTP_USER: Joi.string().required(),
     SCHEDULE: Joi.string().default('23:59:59'),
-    ENVIROMENT: Joi.string().required()
+    ENVIROMENT: Joi.string().default('/agile')
 }).unknown().required();
 
 const { error, value: envVars } = envVarsSchema.validate(process.env);
