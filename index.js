@@ -7,11 +7,12 @@ const vsftp = require('./libs/vsftp')
 const cpenv = require('./libs/cpenv.js')
 const { scheduler, retries, filename, report } = require('./libs/utils/main')
 
+console.log(new Date(), 'Backup service started', version)
+
 setImmediate(async () => { await retries(main, process.argv[2] || 1); scheduler(main, config.schedule) })
 
 async function main() {
-    console.log(new Date(), 'Backup started', version)
-
+    console.log(new Date(), 'Backup started')
     const path = `./${filename()}`
     var mongo_ok = false, minio_ok = false, backup_ok = false
 
