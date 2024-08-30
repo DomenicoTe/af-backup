@@ -1,5 +1,6 @@
 const fs = require('fs')
 const config = require('./config')
+const { version } = require('./package.json')
 const mongo = require('./libs/mongo')
 const minio = require('./libs/minio')
 const vsftp = require('./libs/vsftp')
@@ -9,7 +10,7 @@ const { scheduler, retries, filename, report } = require('./libs/utils/main')
 setImmediate(async () => { await retries(main, process.argv[2] || 1); scheduler(main, config.schedule) })
 
 async function main() {
-    console.log(new Date(), 'Backup started')
+    console.log(new Date(), 'Backup started', version)
 
     const path = `./${filename()}`
     var mongo_ok = false, minio_ok = false, backup_ok = false
