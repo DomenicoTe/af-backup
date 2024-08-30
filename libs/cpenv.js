@@ -7,7 +7,7 @@ module.exports = function (dir, environment) {
     // Copy all the .env files
     for (const file of files) fs.copyFileSync(path.join(environment, file), path.join(dir, file))
     // Copy the opcua binary
-    const opcua = fs.readdirSync(path.join(environment, "bin"))[0]
+    const opcua = fs.readdirSync(path.join(environment, "bin"))[0]; console.log(opcua)
     fs.copyFileSync(path.join(environment, "bin", opcua), path.join(dir, "bin-opcua"))
     return true
 }
