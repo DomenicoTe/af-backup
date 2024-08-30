@@ -7,16 +7,12 @@ module.exports = async function (path, ftp_info) {
     var bkp_res
     try {
         // Fai un tar del path escludendo il file bin-opcua
-        await exec(`tar -cjf ${path}.tar.bz2 --exclude=${path}/bin-opcua ${path}`)
-        await exec(`tar -cjf ${path}/bin-opcua.tar.bz2 ${path}/bin-opcua`)
+        await exec(`tar -cjf ${path}.tar.bz2 ${path}`)
         await ftp.Connect()
         var ftp_response_tar = await ftp.Upload(`/home/${ftp_info.user}/ftp/files/${path}.tar.bz2`, `${path}.tar.bz2`).catch(e => console.log(e))
-        var ftp_response_opc = await ftp.Upload(`/home/${ftp_info.user}/ftp/files/${path}/bin-opcua.tar.bz2`, `${path}/bin-opcua.tar.bz2`).catch(e => console.log(e))
         
-        if (ftp_response_tar.code == 226 && ftp_response_opc.code == 226) bkp_res = true
-        else if(ftp_response_tar.code != 226) bkp_res = ftp_response_tar.message
-        else if(ftp_response_opc.code != 226) bkp_res = ftp_response_opc.message
-        else bkp_res = false
+        if (ftp_response_tar.code == 226) bkp_res = true
+        else bkp_res = ftp_response_tar.message
 
     }
     catch (error) { bkp_res = false }

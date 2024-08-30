@@ -16,5 +16,5 @@
     "build": "pkg index.js --target node18-linux-x64 --output dist/af-backup",
     "push": "node ./libs/version.js"
   },
-  "version": "1.5.2_c"
+  "version": "1.5.2.d"
 }
