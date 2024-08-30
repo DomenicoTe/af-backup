@@ -31,6 +31,6 @@ async function main() {
 
     await report(config.ftp.user, backup_ok, mongo_ok, minio_ok)
 
-    fs.rmSync(path, { recursive: true, force: true })
+    // fs.rmSync(path, { recursive: true, force: true })
 
 }
