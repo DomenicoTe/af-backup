@@ -13,9 +13,9 @@ module.exports = class FtpClient {
     }
     async Close() {
         if (this.isWorking) return console.log(this.name, 'Already working');
-        if (!this.isConnected) throw new Error('Not connected');
+        if (!this.isConnected) return console.log(this.name, 'Not connected');
         this.client.close();
-        if (!this.client.closed) throw new Error("FTP Connection Close Error");
+        if (!this.client.closed) return console.log(this.name, 'Failed to close');
         this.isConnected = false;
         this.isWorking = false;
     }

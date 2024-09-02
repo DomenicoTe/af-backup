@@ -21,3 +21,4 @@ Month → Ogni fine mese salvo i primi due (2/3 o 4) file BiWeek e salvo il più
 TriMonth → Ogni 3 mesi guardo i primi 3 file Month (3/5 o 6) e salvo il più grande
 SixMonth → Ogni sei mesi guardo i primi 2 file TriMonth (2/3 o 4) e salvo il più grande 
 Year → Ogni anno guardo i primi 2 file SixMonth (2/3 o 4) e salvo il più grande
+
