@@ -18,5 +18,5 @@
     "build": "yarn build:backup && yarn build:restore",
     "push": "node ./libs/version.js"
   },
-  "version": "1.6.2"
+  "version": "1.6.3"
 }
