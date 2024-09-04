@@ -7,7 +7,9 @@ setImmediate(async () => {
     await exec('git push').catch((e) => console.log(e));
     await exec(`git tag -d ${version}`).catch((e) => console.log(e))
     await exec(`git tag ${version}`).catch((e) => console.log(e));// Se il tag esiste già rimuovilo
-
-    await exec(`git push origin ${version}`).catch((e) => console.log(e));
+    //Updates were rejected because the tag already exists in the remote.
+    // await exec(`git push origin ${version}`).catch((e) => console.log(e));
+    // Se il tag remoto esiste già rimuovilo
+    await exec(`git push origin :refs/tags/${version}`).catch((e) => console.log(e));
 
 })
