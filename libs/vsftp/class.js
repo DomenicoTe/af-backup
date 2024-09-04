@@ -12,10 +12,10 @@ module.exports = class FtpClient {
         return connection_status.code == 220;
     }
     async Close() {
-        if (this.isWorking) return console.log(this.name, 'Already working');
-        if (!this.isConnected) return console.log(this.name, 'Not connected');
+        if (this.isWorking) return console.log(this.options.user, 'Already working');
+        if (!this.isConnected) return console.log(this.options.user, 'Not connected');
         this.client.close();
-        if (!this.client.closed) return console.log(this.name, 'Failed to close');
+        if (!this.client.closed) return console.log(this.options.user, 'Failed to close');
         this.isConnected = false;
         this.isWorking = false;
     }
@@ -24,6 +24,13 @@ module.exports = class FtpClient {
         console.log("Uploading", local, "to", remote)
         let ftp_response = await this.client.uploadFrom(local, remote, 0)
         console.log("Uploaded",local, "to", remote, "with code", ftp_response.code)
+        return ftp_response;
+    }
+    async Download(remote, local) {
+        if (!this.isConnected) throw new Error('Not connected');
+        console.log("Downloading", remote, "to", local)
+        let ftp_response = await this.client.downloadTo(local, remote, 0)
+        console.log("Downloaded", remote, "to", local, "with code", ftp_response.code)
         return ftp_response;
     }
 }
