@@ -16,7 +16,9 @@
     "build:backup": "pkg index.js --target node18-linux-x64 --output dist/af-backup",
     "build:restore": "pkg restore.js --target node18-linux-x64 --output dist/af-restore",
     "build": "yarn build:backup && yarn build:restore",
-    "push": "node ./libs/version.js"
+    "new": "node ./libs/version.js",
+    "push": "node ./libs/push.js",
+    "release": "yarn new && yarn build && yarn push"
   },
-  "version": "1.6.3"
+  "version": "da2330"
 }
