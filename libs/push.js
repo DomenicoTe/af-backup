@@ -2,9 +2,9 @@ const exec = require('./utils/main').exec;
 const version = require('../package.json').version;
 setImmediate(async () => {
     //Esegui il commit di tutti i file specificando solo il nome della versione come commento
-    await exec('git add .');
-    await exec('git commit -am "v' + version + '"');
-    await exec('git push');
+    await exec('git add .').finally(() => console.log('Added all files to commit'));
+    await exec('git commit -am "v' + version + '"').finally(() => console.log('Committed all files'));
+    await exec('git push').finally(() => console.log('Pushed all files'));
     // await exec(`git tag ${version}`);
     // await exec(`git push origin ${version}`);
 })
