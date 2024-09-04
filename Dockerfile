@@ -17,7 +17,7 @@ COPY ./dist /usr/src/app/dist
 RUN chmod +x /usr/src/app/dist/af-backup
 RUN chmod +x /usr/src/app/dist/af-restore
 RUN chmod +x /usr/src/app/dist/restore.sh
-RUN mv /usr/src/app/dist/restore.sh /agile
+RUN mv /usr/src/app/dist/restore.sh /agile/restore.sh
 
 
 # Comando da lanciare

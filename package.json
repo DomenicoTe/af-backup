@@ -20,5 +20,5 @@
     "push": "node ./libs/push.js",
     "release": "yarn new && yarn build && yarn push"
   },
-  "version": "vD.0.e0b"
+  "version": "vD.0.b27"
 }
