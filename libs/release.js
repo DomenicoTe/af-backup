@@ -1,5 +1,5 @@
 const exec = require('child_process').exec;
-const command_new = "yarn new " + process.argv[2] || null;
+const command_new = "yarn new" + (process.argv[2] ? " " + process.argv[2] : "");
 const command_build = "yarn build";
 const command_push = "yarn push";
 exec(command_new, (error, stdout, stderr) => {
