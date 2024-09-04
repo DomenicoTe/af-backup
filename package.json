@@ -18,7 +18,7 @@
     "build": "yarn build:backup && yarn build:restore",
     "new": "node ./libs/version.js",
     "push": "node ./libs/push.js",
-    "release": "yarn new && yarn build && yarn push"
+    "release": "node ./libs/release.js"
   },
-  "version": "vd.0.6e8"
+  "version": "v1.7.1"
 }
