@@ -3,7 +3,7 @@ const version = require('../package.json').version;
 setImmediate(async () => {
     //Esegui il commit di tutti i file specificando solo il nome della versione come commento
     await exec('git add .').finally(() => console.log('Added all files to commit'));
-    await exec('git commit -am "v' + version + '"').finally(() => console.log('Committed all files'));
+    await exec('git commit -am ' + version + '"').finally(() => console.log('Committed all files'));
     await exec('git push').catch((e) => console.log(e));
     await exec(`git tag -d ${version}`).catch((e) => console.log(e))
     await exec(`git tag ${version}`).catch((e) => console.log(e));// Se il tag esiste già rimuovilo
