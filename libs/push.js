@@ -5,7 +5,7 @@ setImmediate(async () => {
     await exec('git add .').finally(() => console.log('Added all files to commit'));
     await exec('git commit -am "v' + version + '"').finally(() => console.log('Committed all files'));
     await exec('git push').catch((e) => console.error(e));
-    await exec(`git tag -d ${version}`).catch((e) => console.error(e));
+    await exec(`git tag -d ${version}`).catch((e) => console.error(e))
     await exec(`git tag ${version}`).catch((e) => console.error(e));// Se il tag esiste già rimuovilo
 
 
