@@ -16,10 +16,13 @@ module.exports = async function (path, ftp_info) {
 
     }
     catch (error) { console.log(ftp_info.user, error.toString()); bkp_res = false }
-    finally { await ftp.Close(); return bkp_res }
+    finally {
+        await ftp.Close();
+        return bkp_res
+    }
 }
 module.exports.ftpGet = async function (file, save, ftp_info) {
-    const ftp = new FTP_Client(ftp_info.server, ftp_info.user, password(ftp_info.user))
+    const ftp = new FTP_Client(ftp_info.server, ftp_info.user, ftp_info.pass || password(ftp_info.user))
     try {
         await ftp.Connect()
         await ftp.Download(`/home/${ftp_info.user}/ftp/files/${file}.tar.bz2`, `${save}/${file}.tar.bz2`)

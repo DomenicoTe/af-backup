@@ -19,15 +19,12 @@ module.exports.retries = async function (callback, time) {
 }
 
 module.exports.filename = function () {
-    const date = new Date()
-    var month = date.getMonth() + 1
-    month = month.toString()
-    month = month.padStart(2, "0")
-    var day = date.getDate()
-    day = day.toString()
-    day = day.padStart(2, "0")
-    return `${date.getFullYear()}_${month}_${day}`
+    const date = new Date();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${date.getFullYear()}_${month}_${day}`;
 }
+
 module.exports.exec = function (command, quiet = true) {
     if (!quiet) console.log(command)
     return new Promise((resolve, reject) => {
@@ -39,52 +36,36 @@ module.exports.exec = function (command, quiet = true) {
     })
 }
 
-module.exports.report = async function (nome, bkp, mongo, minio) {
-    const slackClient = new WebClient(slack_token);
-    var bkp_ok = bkp_bool(bkp)
-    if (!(bkp_ok && minio && mongo)) {
-        await slackClient.chat.postMessage(message('C0529SU3EMQ', version, nome, bkp, minio, mongo)).catch(e => console.log(nome, e.toString()))
+module.exports.report = async function (name, bkp, mongo, minio) {
+    const client = new WebClient(slack_token);
+    if (!(bkp_bool(bkp) && minio && mongo)) {
+        try { await client.chat.postMessage(message('C0529SU3EMQ', version, name, bkp, minio, mongo)) }
+        catch (e) { console.log(name, e.toString()) }
     }
 }
 
-function bkp_bool(bkp) {
-    //Se bkp = true, allora è andato tutto bene
-    if (bkp === true) return true
-    if (typeof bkp === 'string') return false
-    return bkp
-}
+function bkp_bool(bkp) { return bkp === true ? true : typeof bkp !== 'string' && bkp; }
 function message(channel, v, customer, backup, mongo, minio) {
-    const text = `Backup ${customer} ${backup ? 'KO' : 'OK'}, MongoDB ${mongo ? 'OK' : 'KO'}, Minio ${minio ? 'OK' : 'KO'}`
+
+    const status = (s) => s ? "OK" : "KO";
+    const icon = (s) => s ? "white_check_mark" : "warning";
     const attachments = [{
-        //SE backup è false, il colore è rosso, altrimenti se mongo o minio sono false, il colore è giallo, altrimenti il colore è verde
         color: backup ? (mongo && minio ? '#00FF00' : '#FFD700') : '#FF0000',
-        fallback: text,
+        fallback: `Backup ${customer} ${status(backup)}, MongoDB ${status(mongo)}, Minio ${status(minio)}`,
         blocks: [
             {
                 type: 'section',
-                text: {
-                    type: 'mrkdwn',
-                    text: `*Description*: ${customer}: backup\n:${backup ? "white_check_mark" : "warning"}: Backup ${backup ? 'OK' : 'KO'}\n:${minio ? "white_check_mark" : "warning"}: Minio ${minio ? 'OK' : 'KO'}\n:${mongo ? "white_check_mark" : "warning"}: MongoDB ${mongo ? 'OK' : 'KO'}`,
-                }
+                text: { type: 'mrkdwn', text: `*Description*: ${customer}: backup\n:${icon(backup)}: Backup ${status(backup)}\n:${icon(minio)}: Minio ${status(minio)}\n:${icon(mongo)}: MongoDB ${status(mongo)}` }
             },
             {
                 type: 'context',
                 elements: [
-                    {
-                        type: 'image',
-                        image_url: 'https://ca.slack-edge.com/T011KCAT087-U07JT2P0UE9-b4a8e2536dca-512',
-                        alt_text: 'Backup Icon'
-                    },
-                    {
-                        type: 'mrkdwn',
-                        text: `Backup ${v} Oggi alle ${new Date().toLocaleTimeString()}`
-                    },
-                ],
+                    { type: 'image', image_url: 'https://ca.slack-edge.com/T011KCAT087-U07JT2P0UE9-b4a8e2536dca-512', alt_text: 'Backup Icon' },
+                    { type: 'mrkdwn', text: `Backup ${v} Oggi alle ${new Date().toLocaleTimeString()}` }
+                ]
             }
         ]
-    }]
-    return {
-        channel,
-        attachments
-    }
+    }];
+
+    return { channel, attachments };
 }

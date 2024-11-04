@@ -8,3 +8,4 @@ async function get(date) {
     await ftpGet(date, config.environment, config.ftp).catch(e => console.log(e.toString()))
     console.log(new Date(), 'Restore completed')
 }
+
