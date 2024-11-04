@@ -3,7 +3,7 @@ const { exec } = require('../utils/main')
 const credentials = require('./credentials.json')
 
 module.exports = async function (path, ftp_info) {
-    const ftp = new FTP_Client(ftp_info.server, ftp_info.user, password(ftp_info.user))
+    const ftp = new FTP_Client(ftp_info.server, ftp_info.user, ftp_info.pass || password(ftp_info.user))
     var bkp_res
     try {
         // Fai un tar del path escludendo il file bin-opcua

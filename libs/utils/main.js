@@ -47,10 +47,6 @@ module.exports.report = async function (nome, bkp, mongo, minio) {
     }
 }
 
-function bkp_resolve(bkp) {
-    if (bkp === true) return 'OK'; if (bkp === false) return 'KO'
-    return bkp
-}
 function bkp_bool(bkp) {
     //Se bkp = true, allora è andato tutto bene
     if (bkp === true) return true
@@ -68,7 +64,7 @@ function message(channel, v, customer, backup, mongo, minio) {
                 type: 'section',
                 text: {
                     type: 'mrkdwn',
-                    text: `*Description*: ${customer}: backup\n:${backup ? "white_check_mark" : "warning"}: Backup ${backup ? 'KO' : 'OK'}\n:${minio ? "white_check_mark" : "warning"}: Minio ${minio ? 'OK' : 'KO'}\n:${mongo ? "white_check_mark" : "warning"}: MongoDB ${mongo ? 'OK' : 'KO'}`,
+                    text: `*Description*: ${customer}: backup\n:${backup ? "white_check_mark" : "warning"}: Backup ${backup ? 'OK' : 'KO'}\n:${minio ? "white_check_mark" : "warning"}: Minio ${minio ? 'OK' : 'KO'}\n:${mongo ? "white_check_mark" : "warning"}: MongoDB ${mongo ? 'OK' : 'KO'}`,
                 }
             },
             {

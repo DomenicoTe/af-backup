@@ -31,8 +31,5 @@ async function main() {
 
     console.log(new Date(), backup_ok ? 'Backup completed' : 'Backup failed')
 
-    await report(config.ftp.user, backup_ok, mongo_ok, minio_ok)
-
-    // fs.rmSync(path, { recursive: true, force: true })
-
+    
 }

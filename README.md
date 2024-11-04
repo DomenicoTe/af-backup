@@ -22,3 +22,10 @@ TriMonth → Ogni 3 mesi guardo i primi 3 file Month (3/5 o 6) e salvo il più g
 SixMonth → Ogni sei mesi guardo i primi 2 file TriMonth (2/3 o 4) e salvo il più grande 
 Year → Ogni anno guardo i primi 2 file SixMonth (2/3 o 4) e salvo il più grande
 
+# Comandi repo
+yarn build:backup Builda af-backup
+yarn build:restore Builda af-restore
+yarn build → Fa sia uno che l'altro
+
+yarn new → Aggiorna il package.json file (basta passare solo il numero di versione es x.x.x)
+
