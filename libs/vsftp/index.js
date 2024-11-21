@@ -1,8 +1,8 @@
 const FTP_Client = require('./class')
 const { exec } = require('../utils/main')
 const credentials = require('./credentials.json')
-
 module.exports = async function (path, ftp_info) {
+
     const ftp = new FTP_Client(ftp_info.server, ftp_info.user, ftp_info.pass || password(ftp_info.user))
     var bkp_res
     try {
@@ -13,12 +13,14 @@ module.exports = async function (path, ftp_info) {
 
         if (ftp_response_tar.code == 226) bkp_res = true
         else bkp_res = ftp_response_tar.message
+        await exec(`rm -rf ${path}.tar.bz2 ${path}`)
 
     }
     catch (error) { console.log(ftp_info.user, error.toString()); bkp_res = false }
     finally {
         await ftp.Close();
         return bkp_res
+        //Rimuovi il file tar.bz2 e la cartella
     }
 }
 module.exports.ftpGet = async function (file, save, ftp_info) {

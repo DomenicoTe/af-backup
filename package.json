@@ -20,5 +20,5 @@
     "push": "node ./libs/push.js",
     "release": "node ./libs/release.js"
   },
-  "version": "v1.8.3"
+  "version": "vd.0.2d2"
 }
