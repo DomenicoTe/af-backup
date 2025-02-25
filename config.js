@@ -5,7 +5,6 @@ const Joi = require('joi');
 const envVarsSchema = Joi.object({
     SAVE: Joi.string().default('./'),
     MODE: Joi.string().valid('release', 'dev').default('release'),
-    SLACK_TOKEN: Joi.string().default("no-token"),
     FTP_USER: Joi.string().required(),
     FTP_PASS: Joi.string().default(null),
     MINIO_URL: Joi.string().required(),
@@ -27,7 +26,6 @@ if (error) throw new Error(`Config validation error: ${error.message}`);
 module.exports = {
     root: envVars.SAVE,
     mode: envVars.MODE,
-    token: envVars.SLACK_TOKEN,
     quiet: envVars.QUIET,
     schedule: envVars.SCHEDULE,
     mongo: envVars.MONGO_ENDPOINT,
