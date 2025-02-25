@@ -16,7 +16,7 @@ const envVarsSchema = Joi.object({
     MINIO_ENDPOINT: Joi.string().default('minio'),
     MONGO_ENDPOINT: Joi.string().default('mongodb'),
     SCHEDULE: Joi.string().default('23:59:59'),
-    ENVIROMENT: Joi.string().default('/agile'),
+    ENVIROMENT: Joi.string().default('agile-factory'),
     INCLUDE: Joi.string().default(''),
 }).unknown().required();
 
@@ -45,5 +45,5 @@ module.exports = {
     },
     ftp: { "user": envVars.FTP_USER, server: "94.72.143.145", pass: envVars.FTP_PASS },
     environment: envVars.ENVIROMENT,
-    includes: [".env", ...envVars.INCLUDE.split(' ')]
+    includes: [".env", ...envVars.INCLUDE.split(' ')].filter(e => e !== '')
 }
