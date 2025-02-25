@@ -1,11 +1,11 @@
-require('dotenv').config({path: 'backup.env'})
+require('dotenv').config()
 const Joi = require('joi');
 
 // define validation for all the env vars
 const envVarsSchema = Joi.object({
     SAVE: Joi.string().default('./'),
     MODE: Joi.string().valid('release', 'dev').default('release'),
-    SLACK_TOKEN: Joi.string().required(),
+    SLACK_TOKEN: Joi.string().default("no-token"),
     FTP_USER: Joi.string().required(),
     FTP_PASS: Joi.string().default(null),
     MINIO_URL: Joi.string().required(),

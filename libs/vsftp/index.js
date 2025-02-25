@@ -1,6 +1,6 @@
 const path = require('path')
 const FTP_Client = require('./class')
-const { exec } = require('../utils/main')
+const exec = require('../utils/exec')
 const credentials = require('./credentials.json')
 const fs = require('fs')
 module.exports = async function (dump, { server, user, pass }) {
