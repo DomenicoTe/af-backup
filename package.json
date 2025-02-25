@@ -22,8 +22,7 @@
     "build:restore": "pkg restore.js --target node18-linux-x64 --output dist/af-restore",
     "build": "yarn build:backup && yarn build:restore",
     "push": "node ./libs/push.js",
-    "release": "node ./libs/release.js",
     "version": "node ./libs/version.js"
   },
-  "version": "v2.0.0"
+  "version": "vd.0.e08"
 }
