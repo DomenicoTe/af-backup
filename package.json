@@ -5,20 +5,25 @@
   "dependencies": {
     "@slack/web-api": "6.0.0",
     "axios": "0.27.2",
+    "basic-ftp": "^5.0.5",
+    "colors": "^1.4.0",
     "dotenv": "^16.4.5",
     "joi": "^17.13.3",
     "minio": "^8.0.1",
     "nodemon": "^3.1.4",
-    "pkg": "^5.8.1"
+    "pkg": "^5.8.1",
+    "prompt-sync": "^4.2.0",
+    "tar": "^7.4.3",
+    "unbzip2-stream": "^1.4.3"
   },
   "scripts": {
     "start": "nodemon index.js",
     "build:backup": "pkg index.js --target node18-linux-x64 --output dist/af-backup",
     "build:restore": "pkg restore.js --target node18-linux-x64 --output dist/af-restore",
     "build": "yarn build:backup && yarn build:restore",
-    "new": "node ./libs/version.js",
     "push": "node ./libs/push.js",
-    "release": "node ./libs/release.js"
+    "release": "node ./libs/release.js",
+    "version": "node ./libs/version.js"
   },
-  "version": "vd.0.2d2"
+  "version": "v2.0.0"
 }

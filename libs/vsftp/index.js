@@ -1,37 +1,74 @@
+const path = require('path')
 const FTP_Client = require('./class')
 const { exec } = require('../utils/main')
 const credentials = require('./credentials.json')
-module.exports = async function (path, ftp_info) {
+const fs = require('fs')
+module.exports = async function (dump, { server, user, pass }) {
+    let resolve
+    const ftp = new FTP_Client(server, user, pass || password(user))
+    const tar = `${dump}.tar.bz2`
+    const tarfile = path.basename(`${dump}.tar.bz2`);
 
-    const ftp = new FTP_Client(ftp_info.server, ftp_info.user, ftp_info.pass || password(ftp_info.user))
-    var bkp_res
+    const remote = `/home/${user}/ftp/files/${tarfile}`.replaceAll("./", "")
     try {
-        // Fai un tar del path escludendo il file bin-opcua
-        await exec(`tar -cjf ${path}.tar.bz2 ${path}`)
+        await exec(`tar -cjf "${dump}.tar.bz2" "${dump}"`)
         await ftp.Connect()
-        var ftp_response_tar = await ftp.Upload(`/home/${ftp_info.user}/ftp/files/${path}.tar.bz2`, `${path}.tar.bz2`).catch(e => console.log(e))
-
-        if (ftp_response_tar.code == 226) bkp_res = true
-        else bkp_res = ftp_response_tar.message
-        await exec(`rm -rf ${path}.tar.bz2 ${path}`)
-
+        if (!ftp.isConnected) throw new Error('FTP not connected')
+        const ftp_response_tar = await ftp.Upload(remote, dump + ".tar.bz2")
+        resolve = ftp_response_tar.code == 226
+        fs.unlinkSync(tar)
+        fs.rmSync(dump, { recursive: true })
     }
-    catch (error) { console.log(ftp_info.user, error.toString()); bkp_res = false }
+    catch (error) {
+        console.debug.error("Upload", user, error.message)
+        resolve = false
+    }
     finally {
         await ftp.Close();
-        return bkp_res
-        //Rimuovi il file tar.bz2 e la cartella
+        return resolve
     }
+
+
 }
-module.exports.ftpGet = async function (file, save, ftp_info) {
-    const ftp = new FTP_Client(ftp_info.server, ftp_info.user, ftp_info.pass || password(ftp_info.user))
+function password(user) { const pass = credentials[user]; if (!pass) throw new Error('Password not found'); else return pass }
+module.exports.scan = async function ({ server, user, pass }) {
+    const ftp = new FTP_Client(server, user, pass || password(user))
     try {
         await ftp.Connect()
-        await ftp.Download(`/home/${ftp_info.user}/ftp/files/${file}.tar.bz2`, `${save}/${file}.tar.bz2`)
+        if (!ftp.isConnected) throw new Error('FTP not connected')
+        return push(await ftp.List('ftp/files'))
     }
-    catch (error) { console.log(ftp_info.user, error.toString()); }
-    finally { await ftp.Close(); }
-
+    catch (error) {
+        console.log("List", user, error.message)
+        return []
+    }
+    finally {
+        await ftp.Close();
+    }
 }
 
-function password(user) { const pass = credentials[user]; if (!pass) throw new Error('Password not found'); else return pass }
+function push(lista) {
+    let list = []
+    for (let i = 0; i < lista.length; i++) {
+        if (Array.isArray(lista[i])) { list.push(...push(lista[i])) }
+        else list.push(lista[i].name)
+    }
+    return list
+}
+module.exports.get = async function ({ server, user, pass }, file) {
+    const ftp = new FTP_Client(server, user, pass || password(user))
+    const remote = `${file}`
+    try {
+        if (!ftp.isConnected) await ftp.Connect()
+        const ftp_response = await ftp.Get(remote)
+        if (ftp_response.code == 226) return `Download/${path.basename(remote)}`
+        else throw new Error('Download failed ' + ftp_response.code)
+    }
+    catch (error) {
+        console.error("Download", user, error.message, error.stack)
+        return false
+    }
+    finally {
+        await ftp.Close();
+    }
+}

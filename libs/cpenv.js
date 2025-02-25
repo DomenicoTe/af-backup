@@ -1,10 +1,20 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = function (dir, environment) {
-    const files = fs.readdirSync(environment).filter(file => file.endsWith('.env'))
-    if (files.length === 0) { console.log('No .env files found'); return false }
-    // Copy all the .env files
-    for (const file of files) fs.copyFileSync(path.join(environment, file), path.join(dir, file))
+module.exports = function (dir, env, extensions) {
+    if (!fs.existsSync(env)) {
+        console.debug.warning('No .env directory found');
+        return false
+    }
+    const files = fs.readdirSync(env)
+        .filter(file => check(file, extensions))
+    if (files.length === 0) {
+        console.debug.warning('No .env files found');
+        return false
+    }
+    for (const file of files) fs.copyFileSync(path.join(env, file), path.join(dir, file))
     return true
+}
+function check(file, extensions) {
+    return extensions.some(ext => file.endsWith(ext));
 }

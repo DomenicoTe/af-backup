@@ -1,11 +1,23 @@
 const config = require('./config')
-const ftpGet = require('./libs/vsftp').ftpGet
-const exec = require('./libs/utils/main').exec
-setImmediate(async () => { await get(process.argv[2]) })
-async function get(date) {
-    if (!date) throw new Error('Date not provided for restore')
-    console.log(new Date(), 'Restore started', require('./package.json').version)
-    await ftpGet(date, config.environment, config.ftp).catch(e => console.log(e.toString()))
-    console.log(new Date(), 'Restore completed')
-}
+const { scan, get } = require('./libs/vsftp');
+const extract = require('./libs/extract.js')
+const prompt = require('prompt-sync')();
+(async () => {
+    console.log("Welcome to the restore service wait a moment")
+    const list = (await scan(config.ftp))
+    console.log(list.map((file, index) => `${index} -\t${file}`).join('\n'))
+    console.log("Choose the file to restore ")
+    const file = prompt("File(enter the number): ")
+    const filename = list[file]
+    console.log("Downloading file", filename)
+    const downpath = await get(config.ftp, filename)
+    console.log("Restore service finished")
+    await extract(downpath)
 
+    return
+})();
+
+function map(file) {
+    if (Array.isArray(file)) { return file.map(item => map(item)) }
+    return file.name
+}
