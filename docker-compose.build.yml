@@ -8,8 +8,7 @@ services:
     networks:
       - app
     volumes:
-      - ./agile-factory:/agile
-    
+    - ./agile-factory:/agile
 networks:
   app:
     external: true

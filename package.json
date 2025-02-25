@@ -24,5 +24,5 @@
     "push": "node ./libs/push.js",
     "version": "node ./libs/version.js"
   },
-  "version": "v2.0.1"
+  "version": "v2.0.2"
 }

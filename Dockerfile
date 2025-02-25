@@ -29,13 +29,13 @@ RUN apt-get update && \
 
 # Imposta la directory di lavoro
 WORKDIR /usr/src/app
-
+RUN mkdir -p /agile
 # Copia solo la cartella dist dalla fase di build
 COPY --from=builder /usr/src/app/dist /usr/src/app/dist
 
 # Assicurati che i file siano eseguibili
 RUN chmod +x /usr/src/app/dist/af-backup \
-    && chmod +x /usr/src/app/dist/af-restore \
-    && cp /usr/src/app/dist/af-restore /agile
+    && chmod +x /usr/src/app/dist/af-restore 
+
 # Comando da eseguire all'avvio
-CMD ["/usr/src/app/dist/af-backup"]
+CMD ["sh", "-c", "cp /usr/src/app/dist/af-restore /agile/af-restore && /usr/src/app/dist/af-backup"]
