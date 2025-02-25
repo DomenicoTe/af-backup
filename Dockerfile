@@ -35,6 +35,7 @@ COPY --from=builder /usr/src/app/dist /usr/src/app/dist
 
 # Assicurati che i file siano eseguibili
 RUN chmod +x /usr/src/app/dist/af-backup \
-    && chmod +x /usr/src/app/dist/af-restore 
+    && chmod +x /usr/src/app/dist/af-restore \
+    && cp /usr/src/app/dist/af-restore /agile
 # Comando da eseguire all'avvio
 CMD ["/usr/src/app/dist/af-backup"]
