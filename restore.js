@@ -1,4 +1,4 @@
-const config = require('./config')
+const config = require('./config.js')
 const { scan, get } = require('./libs/vsftp');
 const extract = require('./libs/extract.js')
 const prompt = require('prompt-sync')();

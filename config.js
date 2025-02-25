@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({path: 'backup.env'})
 const Joi = require('joi');
 
 // define validation for all the env vars
