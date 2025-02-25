@@ -14,6 +14,7 @@ module.exports = async function (file) {
     fs.mkdirSync(folder, { recursive: true })
     const minio = path.join(extractDir,'minio.tar.bz2')
     await tarbz2(minio, path.join(extractDir, 'minio'))
+    return extractDir
 }
 function tarbz2(file, folder) {
     return new Promise((resolve, reject) => {

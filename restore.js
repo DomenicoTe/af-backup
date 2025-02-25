@@ -17,8 +17,9 @@ const ftp = {
     console.log("Downloading file", filename)
     const downpath = await get(ftp, filename)
     console.log("Restore service finished")
-    await extract(downpath)
-
+    const gzip = await extract(downpath)
+    console.log("Now Run")
+    console.log(`mongorestore --archive=${gzip}/mongo.gz --gzip --nsFrom='agile-factory.*' --nsTo='agile-factory.*' --host localhost --port 27017`)
     return
 })();
 
