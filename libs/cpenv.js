@@ -19,9 +19,5 @@ module.exports = function (dir, env, extensions) {
     return true
 }
 function check(file, extensions) {
-    //togli le cartelle che iniziano per .nomecartella
-    // if (file.startsWith('.')) return false;
-    const x = extensions.some(ext => file.endsWith(ext));
-    console.log(extensions)
     return extensions.some(ext => file.endsWith(ext));
 }
