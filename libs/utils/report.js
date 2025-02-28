@@ -2,7 +2,7 @@ const axios = require('axios');
 const { version } = require('../../package.json')
 module.exports = async function (name, bkp, mongo, minio) {
     if (!(bkp && minio && mongo)) {
-        try { await post('https://hooks.slack.com/services/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', text(name, version, bkp, mongo, minio)) }
+        try { await post('https://hooks.slack.com/services/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', text(name, version, bkp, mongo, minio)) }
         catch (e) { console.log(name, e.toString()) }
     }
     else console.debug.log('Backup:', bkp ? "OK" : "KO", "MongoDB:", mongo ? "OK" : "KO", "Minio:", minio ? "OK" : "KO")
