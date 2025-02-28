@@ -28,13 +28,12 @@ module.exports = class Minio_Client {
         //get all buckets
         return new Promise((resolve, reject) => {
             this.client.listBuckets(async (err, buckets) => {
-                var bucketList = {};
                 if (err) reject(err);
                 else {
                     for (let i = 0; i < buckets.length; i++) {
-                        bucketList[buckets[i].name] = await this.listObjects(buckets[i].name);
+                        buckets[i].files = await this.listObjects(buckets[i].name);
                     }
-                    resolve(bucketList);
+                    resolve(buckets);
                 }
             });
         });

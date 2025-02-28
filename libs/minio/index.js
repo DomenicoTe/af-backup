@@ -7,18 +7,18 @@ module.exports = async function (path, config) {
     try {
         const minio = new Minio_Client(config)
         const list = await minio.list()
-
+        
         if (!fs.existsSync(`${path}/minio`))
             fs.mkdirSync(`${path}/minio`, { recursive: true })
         if (!list.length) {
             console.debug.warning('No files found in minio')
             return true
         }
-        for (const bucket in list) {
-            for (const object of list[bucket]) {
+        for (const bucket of list) {
+            for (const object of bucket.files) {
                 if (!quiet)
-                    console.debug.dlog(`Downloading ${object} from ${bucket}`)
-                await minio.download(object, `${path}/minio/${object}`, bucket)
+                    console.debug.info(`Downloading ${object} from ${bucket.name} to ${path}/minio/${object}`)
+                await minio.download(object, `${path}/minio/${object}`, bucket.name)
             }
         }
         await exec(`tar -cjf ${path}/minio.tar.bz2 ${path}/minio`)
