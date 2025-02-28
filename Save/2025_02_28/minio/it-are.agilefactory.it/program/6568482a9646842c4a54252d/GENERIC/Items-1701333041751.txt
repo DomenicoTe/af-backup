@@ -1,4 +1,0 @@
-Device1.ProductCounter1.StringDescribtion.Data
-Device1.HTSK_MAIN1.OP_MODE
-Device1.ProductCounter1.sPassedPartNumber
-Device1.ProductCounter1.sOrderNum
