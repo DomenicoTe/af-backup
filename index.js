@@ -45,7 +45,7 @@ async function release(path) {
     console.debug.info('Release mode');
     const result = {
         env: cpenv(path, config.environment, config.includes),
-        // mongo: await mongo(path, config.mongo, config.mongodb),
+        mongo: await mongo(path, config.mongo, config.mongodb),
         minio: await minio(path, config.minio),
     }
     return result;
