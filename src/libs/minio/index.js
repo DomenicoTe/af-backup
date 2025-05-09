@@ -13,9 +13,8 @@ module.exports = async function (path, config) {
         for (let bucket of buckets) {
             for (let item of bucket.files) await client.download(item, `${path}/minio/${item}`, bucket.name)
         }
-        await execute(`tar -cjf ${path}/minio.tar.bz2 ${path}/minio`)
-
-        console.debug.success('Minio complete')
+        console.debug.success('Minio complete', path)
+        await execute(`tar -cjf ${path}/minio.tar.bz2 -C ${path}/minio/ .`)
         return true
     }
     catch (error) { console.debug.err("Minio failed", error.message); return false }

@@ -12,18 +12,19 @@
     "nodemon": "^3.1.4",
     "pkg": "^5.8.1",
     "tar": "^7.4.3",
-    "unbzip2-stream": "^1.4.3"
+    "unbzip2-stream": "^1.4.3",
+    "prompt-sync": "^4.2.0"
   },
   "scripts": {
     "start": "nodemon index.js",
     "build:backup": "pkg index.js --target node18-linux-x64 --output dist/af-backup",
     "build:restore": "pkg restore.js --target node18-linux-x64 --output dist/af-restore",
     "build": "yarn build:backup && yarn build:restore",
-    "push": "node ./libs/push.js",
-    "up_patch": "npm version patch",
-    "up_minor": "npm version minor",
-    "up_major": "npm version major",
-    "commit": "git add . && git commit -m 'update v $(node -p \"require('./package.json').version\")'"
+    "push": "node ./.yarn/push.js",
+    "up_patch": "node ./.yarn/update.js patch && yarn push",
+    "up_minor": "node ./.yarn/update.js minor && yarn push",
+    "up_major": "node ./.yarn/update.js major && yarn push",
+    "up_debug": "node ./.yarn/update.js debug && yarn push"
   },
-  "version": "v2.1.4"
+  "version": "v3.0.0"
 }

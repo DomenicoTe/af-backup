@@ -9,12 +9,11 @@ module.exports = function (command) {
     return new Promise((resolve, reject) => {
         exec(command, (error, stdout, stderr) => {
             if (error) {
-                console.debug.err(`Error: ${error.message}`);
+                console.error(`Error: ${error.message}`);
                 return reject(error);
             }
             if (stderr) {
-                console.debug.err(`stderr: ${stderr}`);
-                return reject(new Error(stderr));
+                console.error(`stderr: ${stderr}`);
             }
             resolve(stdout);
         });

@@ -2,19 +2,25 @@ const fs = require('fs');
 const path = require('path');
 const tar = require('tar');
 const bz2 = require('unbzip2-stream');
-module.exports = async function (file) {
-    const dir = path.dirname(file)
-    const filename = path.basename(file).replace('.tar.bz2', '')
-    const folder = path.join(dir, filename)
-    fs.mkdirSync(folder, { recursive: true })
-    await tarbz2(file, folder)
-    const extractDir = path.join(folder, fs.readdirSync(folder)[0])
-    console.log("Extracted", extractDir)
-    fs.mkdirSync(path.join(extractDir, 'minio'), { recursive: true })
-    fs.mkdirSync(folder, { recursive: true })
-    const minio = path.join(extractDir,'minio.tar.bz2')
-    await tarbz2(minio, path.join(extractDir, 'minio'))
-    return extractDir
+
+path.join = (...args) => args.join('/')
+module.exports = async function (filePATH) {
+    let downPATH = path.dirname(filePATH)
+    console.log("Extracting", filePATH)
+    let itemPATH = path.basename(filePATH).replace('.tar.bz2', '')
+    console.log("Extracting to", itemPATH)
+    let execPATH = path.join(downPATH, itemPATH)
+    console.log("Extracting to", execPATH)
+    fs.mkdirSync(execPATH, { recursive: true })
+    await tarbz2(filePATH, execPATH)
+    let miniPATH = path.join(execPATH, 'minio.tar.bz2')
+    console.log("Extracting minio", miniPATH)
+    fs.mkdirSync(path.join(execPATH, 'minio'), { recursive: true })
+    await tarbz2(miniPATH, path.join(execPATH, 'minio'))
+    console.log("Extracted minio to", path.join(execPATH, 'minio'))
+    fs.rmSync(miniPATH, { recursive: true, force: true })
+    console.log("Removed minio tar")
+    return execPATH
 }
 function tarbz2(file, folder) {
     return new Promise((resolve, reject) => {

@@ -9,31 +9,31 @@ module.exports = class FtpClient {
         this.client = new ftp.Client();
     }
     async Connect() {
-        let { code } = await this.client.access(this.options)
-        this.isConnected = code == 220;
-        return code == 220;
+        let connection_status = await this.client.access(this.options)
+        if (connection_status.code == 220) this.isConnected = true;
+        return connection_status.code == 220;
     }
     async Close() {
-        if (this.isWorking) return console.debug.warn(this.options.user, 'Already working');
-        if (!this.isConnected) return console.debug.warn(this.options.user, 'Not connected');
+        if (this.isWorking) return console.debug.warning(this.options.user, 'Already working');
+        if (!this.isConnected) return console.debug.warning(this.options.user, 'Not connected');
         this.client.close();
-        if (!this.client.closed) return console.debug.err(this.options.user, 'Failed to close');
+        if (!this.client.closed) return console.debug.error(this.options.user, 'Failed to close');
         this.isConnected = false;
         this.isWorking = false;
     }
     async Upload(remote, local) {
         if (!this.isConnected) throw new Error('Not connected');
         console.debug.info("Uploading", local, "to", remote)
-        let { code } = await this.client.uploadFrom(local, remote, 0)
-        console.debug.log("Uploaded", local, "to", remote, "with code", code)
-        return code;
+        let ftp_response = await this.client.uploadFrom(local, remote, 0)
+        console.debug.log("Uploaded", local, "to", remote, "with code", ftp_response.code)
+        return ftp_response;
     }
     async Download(remote, local) {
         if (!this.isConnected) throw new Error('Not connected');
         console.debug.info("Downloading", remote)
-        let {code} = await this.client.downloadTo(local, remote, 0)
-        console.debug.log("Downloaded", code == 226 ? "success" : "failed")
-        return code
+        let ftp_response = await this.client.downloadTo(local, remote, 0)
+        console.debug.log("Downloaded", ftp_response.code == 226 ? "success" : "failed")
+        return ftp_response;
     }
 
     async List(remote, isChild = false) {
@@ -43,6 +43,7 @@ module.exports = class FtpClient {
             if (lista[i].type == 2) {
                 let root = `${remote}/${lista[i].name}`
                 lista[i] = await this.List(root, true)
+
             }
             else {
                 lista[i].name = `${remote}/${lista[i].name}`
@@ -55,8 +56,8 @@ module.exports = class FtpClient {
         if (!existsSync('Download')) mkdirSync('Download', { recursive: true })
         let list = await this.List(path.dirname(remote))
         list = list.map(item => item.name)
-        console.log(remote, list)
-
+        console.log(remote,list)
+        
         console.log("Restoring file", list.includes(remote) ? remote : "not found")
         let savePoint = `Download/${path.basename(remote)}`
         console.log("Downloading", remote)

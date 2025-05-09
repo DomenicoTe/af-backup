@@ -4,6 +4,7 @@ module.exports = async function (folder, { env, include }) {
         console.debug.info("Copying files started");
         for (let items of include) {
             if (items[0] == "/") {
+                continue
                 console.log(items, path.join(folder, path.basename(items)))
                 fs.copyFileSync(items, path.join(folder, path.basename(items)));
             }
