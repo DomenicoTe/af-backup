@@ -1,47 +1,45 @@
 require('dotenv').config()
 const Joi = require('joi');
 
-// define validation for all the env vars
-const envVarsSchema = Joi.object({
-    SAVE: Joi.string().default('./Save'),
+
+const schema = Joi.object({
+    ENV: Joi.string().valid('./agile-factory','/agile-factory', '/agilefactory').default('/agile-factory'),
     MODE: Joi.string().valid('release', 'dev').default('release'),
     FTP_USER: Joi.string().required(),
-    FTP_PASS: Joi.string().default(null),
+    FTP_PASS: Joi.string().required(),
     MINIO_URL: Joi.string().required(),
     MINIO_USER: Joi.string().required(),
     MINIO_PASS: Joi.string().required(),
-    QUIET: Joi.boolean().default(true),
-    MONGO_DB: Joi.string().default('agile-factory'),
     MINIO_ENDPOINT: Joi.string().default('minio'),
+    MONGO_DB: Joi.string().default('agile-factory'),
     MONGO_ENDPOINT: Joi.string().default('mongodb'),
-    SCHEDULE: Joi.string().default('23:59:59'),
-    ENVIROMENT: Joi.string().default('/agile'),
     INCLUDE: Joi.string().default(''),
 }).unknown().required();
-
-const { error, value: envVars } = envVarsSchema.validate(process.env);
-if (error) throw new Error(`Config validation error: ${error.message}`);
+const { error, value } = schema.validate(process.env)
+if (error) throw new Error(`Environment variable validation error: ${error.message}`)
 
 
 module.exports = {
-    root: envVars.SAVE,
-    mode: envVars.MODE,
-    quiet: envVars.QUIET,
-    schedule: envVars.SCHEDULE,
-    mongo: envVars.MONGO_ENDPOINT,
-    mongodb: envVars.MONGO_DB,
+    env: value.ENV,
+    root: "./Backup",
+    mode: value.MODE,
+    mongo: { db: value.MONGO_DB, url: value.MONGO_ENDPOINT },
     minio: {
-        url: envVars.MINIO_URL,
-        bucket: "agile-factory",
+        url: value.MINIO_URL,
+        bucket: 'agile-factory',
         options: {
-            endPoint: envVars.MINIO_ENDPOINT,
+            endPoint: value.MINIO_ENDPOINT,
             port: 9001,
             useSSL: false,
-            accessKey: envVars.MINIO_USER,
-            secretKey: envVars.MINIO_PASS
+            accessKey: value.MINIO_USER,
+            secretKey: value.MINIO_PASS
         }
     },
-    ftp: { "user": envVars.FTP_USER, server: "94.72.143.145", pass: envVars.FTP_PASS },
-    environment: envVars.ENVIROMENT,
-    includes: [".env", ...envVars.INCLUDE.split(' ')].filter(e => e !== '')
+    backup: {
+        user: value.FTP_USER,
+        pass: value.FTP_PASS,
+        server: "94.72.143.145"
+    },
+    include: ['env', '/etc/fstab', value.INCLUDE.split(' ')].filter(Boolean)
+    // include: ['env', value.INCLUDE.split(' ')].filter(Boolean)
 }
