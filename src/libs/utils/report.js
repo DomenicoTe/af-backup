@@ -22,7 +22,7 @@ function attachment(name, files, mongo, minio, ftp) {
                         type: "section",
                         text: {
                             "type": "mrkdwn",
-                            "text": `*Description*: ${name} ${log(name, files, mongo, minio, ftp)}`
+                            "text": `*Description*: ${name} ${log(files, mongo, minio, ftp)}`
                         }
                     },
                     {
