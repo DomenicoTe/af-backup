@@ -1,10 +1,12 @@
 const fs = require('fs');
 const { filename, checkout, report } = require('./libs/utils')
+
+const config = require('../config.js');
 const copy = require('./libs/copy/index.js');
 const minio = require('./libs/minio/index.js');
 const mongo = require('./libs/mongo/index.js');
 const vsftp = require('./libs/vsftp/index.js');
-module.exports = async function (config) {
+module.exports = async function () {
     console.debug.info(config.mode.toUpperCase(), 'mode');
     const folder = filename(config.root);
     let check = { minio: false, mongo: false, files: false }, ftp;

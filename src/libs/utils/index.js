@@ -4,3 +4,4 @@ module.exports.report = require('./report.js');
 module.exports.filename = require('./filename.js');
 module.exports.checkout = require('./checkout.js');
 module.exports.execute = require('./execute.js');
+module.exports.scheduler = require('./scheduler.js');

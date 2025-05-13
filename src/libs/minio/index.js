@@ -1,5 +1,5 @@
 const { existsSync, mkdirSync, rmSync, } = require('fs')
-const Minio_Client = require('./class');
+const Minio_Client = require('./class.js');
 const { execute } = require('../utils');
 
 module.exports = async function (path, config) {
