@@ -17,7 +17,7 @@ if (!fs.existsSync(downPATH)) fs.mkdirSync(downPATH, { recursive: true });
     let strList = list.map((file, index) => `${index} -\t${file}`).join('\n')
     console.debug.log("Choose the file to restore ")
     console.log(strList)
-    const file = 0 //prompt("File(enter the number): ")
+    const file = prompt("File(enter the number): ")
     const filename = list[file]
     console.debug.log("Downloading file", filename)
     const downpath = await get(ftpOPTION, filename)
