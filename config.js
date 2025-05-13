@@ -13,6 +13,7 @@ const schema = Joi.object({
     MINIO_ENDPOINT: Joi.string().default('minio'),
     MONGO_DB: Joi.string().default('agile-factory'),
     MONGO_ENDPOINT: Joi.string().default('mongodb'),
+    SLACK_WEBHOOK: Joi.string().default('NO'),
     INCLUDE: Joi.string().default(''),
 }).unknown().required();
 const { error, value } = schema.validate(process.env)
@@ -40,6 +41,7 @@ module.exports = {
         pass: value.FTP_PASS,
         server: "94.72.143.145"
     },
+    hook: value.SLACK_WEBHOOK,
     include: ['env', '/etc/fstab', value.INCLUDE.split(' ')].filter(Boolean)
     // include: ['env', value.INCLUDE.split(' ')].filter(Boolean)
 }
