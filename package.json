@@ -26,5 +26,5 @@
     "up_major": "node ./.yarn/update.js major && yarn push",
     "up_debug": "node ./.yarn/update.js debug && yarn push"
   },
-  "version": "v3.1.2"
+  "version": "v3.1.3"
 }

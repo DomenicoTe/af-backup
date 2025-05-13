@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { version } = require('../../../package.json');
-const channel = "https://hooks.slack.com/services/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"
+const channel = "https://hooks.slack.com/services/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"
 module.exports = async function (name, { minio, mongo, files }, ftp) {
     if (!ftp || !mongo || !minio || !files)
     // if(false)
