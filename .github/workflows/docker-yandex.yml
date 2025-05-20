@@ -22,7 +22,7 @@ jobs:
     
     - name: Extract repo name
       id: repo
-      run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
+      run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT && echo $GITHUB_OUTPUT
     
     - name: Login to Yandex Container Registry
       run: |
