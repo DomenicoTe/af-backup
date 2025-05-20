@@ -12,14 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check KEY
-      run: |
-        echo 'Content of YC_KEY_JSON:'
-        echo "${{ secrets.YC_KEY_JSON }}"
-        
     - name: Checkout code
       uses: actions/checkout@v3
-
+    - name: Check Key
+      run: echo ${{ secrets.YC_KEY_JSON }}
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
     
