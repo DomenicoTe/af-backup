@@ -1,0 +1,42 @@
+name: Build and Push Docker Image to Yandex Cloud
+
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Extract repo name
+      id: repo
+      run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
+    
+    - name: Login to Yandex Container Registry
+      run: |
+        echo "${{ secrets.YC_KEY_JSON }}" > key.json
+        docker login -u json_key -p "$(cat key.json)" cr.yandex
+
+    - name: Build and Push Docker image
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: |
+          cr.yandex/crpj6aapein775l1n96c/${{ steps.repo.outputs.REPO_NAME }}:latest
+          cr.yandex/crpj6aapein775l1n96c/${{ steps.repo.outputs.REPO_NAME }}:${{ github.ref_name }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
