@@ -21,7 +21,7 @@ jobs:
     
     - name: Login to Yandex Container Registry
       run: |
-        echo "${{ secrets.YC_KEY_JSON }}" > key.json
+        echo ${{ secrets.YC_KEY_JSON }} > key.json
         docker login -u json_key -p "$(cat key.json)" cr.yandex
 
     - name: Build and Push Docker image
