@@ -7,9 +7,9 @@ const schema = Joi.object({
     MODE: Joi.string().valid('release', 'dev').default('release'),
     FTP_USER: Joi.string().required(),
     FTP_PASS: Joi.string().required(),
-    MINIO_URL: Joi.string().required(),
-    MINIO_USER: Joi.string().required(),
-    MINIO_PASS: Joi.string().required(),
+    FILE_STORAGE: Joi.string().required(),
+    MINIO_ACCESSKEY: Joi.string().required(),
+    MINIO_SECRETKEY: Joi.string().required(),
     MINIO_ENDPOINT: Joi.string().default('minio'),
     MONGO_DB: Joi.string().default('agile-factory'),
     MONGO_ENDPOINT: Joi.string().default('mongodb'),
@@ -26,14 +26,14 @@ module.exports = {
     mode: value.MODE,
     mongo: { db: value.MONGO_DB, url: value.MONGO_ENDPOINT },
     minio: {
-        url: value.MINIO_URL,
+        url: value.FILE_STORAGE,
         bucket: 'agile-factory',
         options: {
             endPoint: value.MINIO_ENDPOINT,
             port: 9001,
             useSSL: false,
-            accessKey: value.MINIO_USER,
-            secretKey: value.MINIO_PASS
+            accessKey: value.MINIO_ACCESSKEY,
+            secretKey: value.MINIO_SECRETKEY
         }
     },
     backup: {
