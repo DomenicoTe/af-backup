@@ -22,7 +22,7 @@ jobs:
     
     - name: Login to Yandex Container Registry
       run: |
-        echo ${{ secrets.YC_KEY_JSON }} | docker login -u json_key --password-stdin cr.yandex
+        docker login -u json_key -p ${{ secrets.YC_KEY_JSON }} cr.yandex
 
     - name: Build and Push Docker image
       uses: docker/build-push-action@v3
